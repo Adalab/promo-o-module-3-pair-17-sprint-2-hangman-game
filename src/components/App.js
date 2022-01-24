@@ -11,18 +11,23 @@ import Footer from './Footer';
 import { Route, Switch } from 'react-router-dom';
 import Instructions from './Intructions';
 import Options from './Options';
+import Loading from './Loading';
 
 function App() {
   const [lastLetter, setLastLetter] = useState('');
   const [userLetter, setUserLetters] = useState([]);
   const [word, setWord] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const wordLetters = word.split('');
 
   useEffect(() => {
+    setIsLoading(true);
     object
       .getWordFromApi()
       .then((dataFromApi) => setWord(dataFromApi.body.Word));
+      setIsLoading(false);
+
   }, []);
 
   const setLetters = (name, value) => {
@@ -53,6 +58,7 @@ function App() {
         <section>
           <Switch>
             <Route exact path="/">
+              <Loading isLoading={isLoading}></Loading>
               <SolutionLetters
                 userLetter={userLetter}
                 wordLetters={wordLetters}
